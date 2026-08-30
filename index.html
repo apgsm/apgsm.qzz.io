@@ -1,0 +1,1360 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>阿裴搞数码 APei · 个人主页</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;800&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --bg: #05070f;
+    --bg2: #0a0f1e;
+    --panel: rgba(16, 24, 48, 0.55);
+    --border: rgba(88, 166, 255, 0.18);
+    --cyan: #22d3ee;
+    --cyan-glow: rgba(34, 211, 238, 0.55);
+    --purple: #a78bfa;
+    --purple-glow: rgba(167, 139, 250, 0.5);
+    --pink: #f472b6;
+    --green: #34d399;
+    --text: #e2e8f0;
+    --muted: #7d8aa5;
+    --mono: 'JetBrains Mono', 'Noto Sans SC', monospace;
+    --sans: 'Noto Sans SC', sans-serif;
+    --grid-glow-1: rgba(88, 28, 135, 0.35);
+    --grid-glow-2: rgba(8, 145, 178, 0.28);
+    --grid-line: rgba(56, 189, 248, 0.06);
+    --nav-bg: rgba(5, 8, 18, 0.6);
+    --item-bg: rgba(255, 255, 255, 0.03);
+    --item-border: rgba(255, 255, 255, 0.06);
+    --track-bg: rgba(255, 255, 255, 0.05);
+    --shadow-strong: rgba(0, 0, 0, 0.5);
+    --orb-opacity: 0.5;
+  }
+
+  /* ---- 亮色主题 ---- */
+  html[data-theme="light"] {
+    --bg: #eef3fa;
+    --bg2: #f7faff;
+    --panel: rgba(255, 255, 255, 0.72);
+    --border: rgba(41, 98, 168, 0.16);
+    --cyan: #0891b2;
+    --cyan-glow: rgba(8, 145, 178, 0.28);
+    --purple: #7c3aed;
+    --purple-glow: rgba(124, 58, 237, 0.22);
+    --pink: #db2777;
+    --green: #059669;
+    --text: #0b1626;
+    --muted: #56677f;
+    --grid-glow-1: rgba(147, 51, 234, 0.10);
+    --grid-glow-2: rgba(8, 145, 178, 0.10);
+    --grid-line: rgba(29, 78, 216, 0.08);
+    --nav-bg: rgba(255, 255, 255, 0.72);
+    --item-bg: rgba(10, 20, 40, 0.04);
+    --item-border: rgba(10, 20, 40, 0.08);
+    --track-bg: rgba(10, 20, 40, 0.06);
+    --shadow-strong: rgba(20, 40, 80, 0.12);
+    --orb-opacity: 0.28;
+  }
+
+  body { transition: background-color 0.4s ease, color 0.4s ease; }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: var(--sans);
+    color: var(--text);
+    background: var(--bg);
+    overflow-x: hidden;
+    line-height: 1.7;
+  }
+
+  /* ---- 背景：网格 + 光晕 ---- */
+  .grid-bg {
+    position: fixed;
+    inset: 0;
+    z-index: -3;
+    background:
+      radial-gradient(1200px 800px at 80% -10%, var(--grid-glow-1), transparent 60%),
+      radial-gradient(1000px 700px at 10% 110%, var(--grid-glow-2), transparent 60%),
+      linear-gradient(180deg, var(--bg) 0%, var(--bg2) 50%, var(--bg) 100%);
+  }
+  .grid-lines {
+    position: fixed;
+    inset: 0;
+    z-index: -2;
+    background-image:
+      linear-gradient(var(--grid-line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+    background-size: 44px 44px;
+    mask-image: radial-gradient(ellipse at center, black 30%, transparent 78%);
+    -webkit-mask-image: radial-gradient(ellipse at center, black 30%, transparent 78%);
+  }
+  .orb {
+    position: fixed;
+    border-radius: 50%;
+    filter: blur(90px);
+    opacity: var(--orb-opacity);
+    z-index: -1;
+    pointer-events: none;
+  }
+  .orb-1 { width: 420px; height: 420px; top: -120px; right: -80px; background: radial-gradient(circle, var(--purple-glow), transparent 70%); animation: drift 18s ease-in-out infinite alternate; }
+  .orb-2 { width: 380px; height: 380px; bottom: -120px; left: -100px; background: radial-gradient(circle, var(--cyan-glow), transparent 70%); animation: drift 22s ease-in-out infinite alternate-reverse; }
+
+  @keyframes drift {
+    0%   { transform: translate(0, 0) scale(1); }
+    100% { transform: translate(60px, -40px) scale(1.15); }
+  }
+
+  /* ---- 导航 ---- */
+  nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 50;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px clamp(20px, 6vw, 64px);
+    backdrop-filter: blur(14px);
+    background: var(--nav-bg);
+    border-bottom: 1px solid var(--border);
+  }
+  .logo {
+    font-family: var(--mono);
+    font-weight: 800;
+    font-size: 18px;
+    letter-spacing: 1px;
+    color: var(--cyan);
+    text-shadow: 0 0 18px var(--cyan-glow);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .logo .prompt { color: var(--green); }
+  .logo .tilde { color: var(--muted); }
+  .nav-left { display: flex; align-items: center; gap: 14px; }
+  /* ---- 主题切换胶囊开关 ---- */
+  .theme-switch {
+    position: relative;
+    width: 80px;
+    height: 36px;
+    border-radius: 999px;
+    background: var(--track-bg);
+    border: 1px solid var(--border);
+    cursor: pointer;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    padding: 0 9px;
+    overflow: hidden;
+    transition: border-color 0.3s, box-shadow 0.3s;
+  }
+  .theme-switch:hover {
+    border-color: var(--cyan);
+    box-shadow: 0 0 14px var(--cyan-glow);
+  }
+  .theme-switch .sw-thumb {
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--cyan), var(--purple));
+    box-shadow: 0 0 12px var(--cyan-glow), inset 0 1px 2px rgba(255,255,255,0.45);
+    z-index: 1;
+    transition: left 0.35s cubic-bezier(.4, 0, .2, 1);
+  }
+  html[data-theme="light"] .theme-switch .sw-thumb { left: calc(100% - 31px); }
+  .theme-switch .sw-ic {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 16px;
+    height: 18px;
+    font-size: 15px;
+    line-height: 1;
+    transition: color 0.3s, opacity 0.3s, filter 0.3s;
+  }
+  .theme-switch .sw-moon { justify-self: start; }
+  .theme-switch .sw-sun { justify-self: end; }
+  /* 状态：当前主题图标高亮，另一侧置灰 */
+  .theme-switch .sw-sun { filter: grayscale(1); opacity: 0.4; }
+  html[data-theme="light"] .theme-switch .sw-sun { filter: none; opacity: 1; }
+  html[data-theme="light"] .theme-switch .sw-moon { filter: grayscale(1); opacity: 0.4; color: #94a3b8; }
+  @media (max-width: 640px) {
+    .theme-switch { width: 76px; }
+  }
+  /* ---- 语言切换 ---- */
+  .lang-switch {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+    padding: 3px;
+    border-radius: 999px;
+    background: var(--track-bg);
+    border: 1px solid var(--border);
+    transition: border-color 0.3s, box-shadow 0.3s;
+  }
+  .lang-switch:hover { border-color: var(--cyan); box-shadow: 0 0 12px var(--cyan-glow); }
+  .lang-switch button {
+    border: none;
+    background: transparent;
+    color: var(--muted);
+    font-family: var(--mono);
+    font-size: 12.5px;
+    font-weight: 600;
+    padding: 4px 7px;
+    border-radius: 999px;
+    cursor: pointer;
+    line-height: 1;
+    transition: color 0.3s, background 0.3s, box-shadow 0.3s;
+  }
+  .lang-switch button:hover { color: var(--text); }
+  .lang-switch button.active {
+    background: linear-gradient(135deg, var(--cyan), var(--purple));
+    color: #04131a;
+    box-shadow: 0 0 10px var(--cyan-glow);
+  }
+  html[data-theme="light"] .lang-switch button.active { color: #fff; }
+  .nav-links { display: flex; gap: 26px; list-style: none; }
+  .nav-links a {
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 14px;
+    letter-spacing: 0.5px;
+    transition: color 0.25s;
+    position: relative;
+  }
+  .nav-links a:hover { color: var(--cyan); }
+  .nav-links a::after {
+    content: '';
+    position: absolute;
+    left: 0; bottom: -5px;
+    width: 0; height: 2px;
+    background: linear-gradient(90deg, var(--cyan), var(--purple));
+    transition: width 0.3s;
+  }
+  .nav-links a:hover::after { width: 100%; }
+
+  /* ---- Hero ---- */
+  header.hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 120px 24px 60px;
+    position: relative;
+  }
+  .avatar {
+    width: 96px;
+    height: 96px;
+    border-radius: 26px;
+    display: grid;
+    place-items: center;
+    font-family: var(--mono);
+    font-weight: 800;
+    font-size: 38px;
+    color: #04131a;
+    background: linear-gradient(135deg, var(--cyan), var(--purple));
+    box-shadow: 0 0 40px var(--cyan-glow), 0 0 80px var(--purple-glow);
+    margin-bottom: 28px;
+    animation: float 5s ease-in-out infinite;
+    border: 1px solid rgba(255,255,255,0.25);
+    overflow: hidden;
+  }
+  .avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+  }
+  .status-line {
+    font-family: var(--mono);
+    font-size: 13px;
+    color: var(--muted);
+    margin-bottom: 18px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .status-dot {
+    width: 9px; height: 9px;
+    border-radius: 50%;
+    background: var(--green);
+    box-shadow: 0 0 12px var(--green);
+    animation: pulse 1.8s infinite;
+  }
+  @keyframes pulse { 0%,100% {opacity:1;} 50% {opacity:0.35;} }
+
+  .hero h1 {
+    font-family: var(--mono);
+    font-size: clamp(34px, 6vw, 62px);
+    font-weight: 800;
+    line-height: 1.15;
+  }
+  .hero h1 .cursor {
+    display: inline-block;
+    width: 3px; height: 0.95em;
+    background: var(--cyan);
+    margin-left: 6px;
+    vertical-align: text-bottom;
+    animation: blink 0.9s step-end infinite;
+    box-shadow: 0 0 12px var(--cyan);
+  }
+  @keyframes blink { 50% { opacity: 0; } }
+
+  .hero .tagline {
+    margin-top: 22px;
+    font-size: clamp(15px, 2.4vw, 19px);
+    color: var(--muted);
+    max-width: 720px;
+  }
+  .hero .tagline b { color: var(--text); }
+  .hero .tagline .hl { color: var(--cyan); }
+
+  .badges {
+    margin-top: 34px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    justify-content: center;
+  }
+  .badge {
+    font-family: var(--mono);
+    font-size: 13px;
+    padding: 8px 14px;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    background: var(--panel);
+    backdrop-filter: blur(8px);
+    color: var(--text);
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    transition: transform 0.25s, border-color 0.25s, box-shadow 0.25s;
+    cursor: default;
+  }
+  .badge:hover {
+    transform: translateY(-3px);
+    border-color: var(--cyan);
+    box-shadow: 0 0 20px var(--cyan-glow);
+  }
+  .badge .ic { font-size: 14px; }
+  .badge.cy  { color: var(--cyan); }
+  .badge.pu  { color: var(--purple); }
+  .badge.gr  { color: var(--green); }
+  .badge.pk  { color: var(--pink); }
+
+  .scroll-hint {
+    position: absolute;
+    bottom: 34px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    color: var(--muted);
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: 2px;
+  }
+  .scroll-hint .mouse {
+    width: 24px; height: 38px;
+    border: 1.5px solid var(--muted);
+    border-radius: 12px;
+    position: relative;
+  }
+  .scroll-hint .mouse::after {
+    content: '';
+    position: absolute;
+    top: 7px; left: 50%;
+    width: 3px; height: 7px;
+    background: var(--cyan);
+    border-radius: 2px;
+    transform: translateX(-50%);
+    animation: wheel 1.6s infinite;
+  }
+  @keyframes wheel {
+    0% { opacity: 1; top: 7px; }
+    100% { opacity: 0; top: 20px; }
+  }
+
+  /* ---- 通用区块 ---- */
+  main { max-width: 1080px; margin: 0 auto; padding: 40px 24px 120px; }
+  section { margin-bottom: 96px; }
+
+  .sec-head {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 40px;
+  }
+  .sec-index {
+    font-family: var(--mono);
+    font-size: 14px;
+    color: var(--cyan);
+    background: rgba(34,211,238,0.1);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 4px 10px;
+    flex-shrink: 0;
+  }
+  .sec-head h2 {
+    font-family: var(--mono);
+    font-size: clamp(20px, 3vw, 26px);
+    font-weight: 700;
+    background: linear-gradient(90deg, #fff, var(--cyan));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .sec-head .line {
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, var(--border), transparent);
+  }
+
+  /* ---- 卡片 ---- */
+  .card {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    padding: 30px;
+    backdrop-filter: blur(12px);
+    position: relative;
+    transition: transform 0.3s, border-color 0.3s, box-shadow 0.3s;
+  }
+  .card:hover {
+    transform: translateY(-4px);
+    border-color: var(--cyan);
+    box-shadow: 0 20px 50px var(--shadow-strong), 0 0 30px var(--cyan-glow);
+  }
+
+  .about-quote {
+    font-family: var(--mono);
+    color: var(--purple);
+    font-size: 15px;
+    border-left: 3px solid var(--purple);
+    padding-left: 16px;
+    margin-bottom: 22px;
+    font-style: italic;
+  }
+  .about-intro { color: var(--text); margin-bottom: 22px; }
+  .about-intro b { color: var(--cyan); }
+
+  .hobby-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+    gap: 16px;
+  }
+  .hobby {
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+    padding: 18px;
+    border-radius: 14px;
+    background: var(--item-bg);
+    border: 1px solid var(--item-border);
+    transition: background 0.3s, border-color 0.3s;
+  }
+  .hobby:hover { background: rgba(34,211,238,0.06); border-color: var(--border); }
+  .hobby .icon {
+    font-size: 26px;
+    line-height: 1;
+    flex-shrink: 0;
+    filter: drop-shadow(0 0 8px var(--cyan-glow));
+  }
+  .hobby .t { font-weight: 600; margin-bottom: 4px; }
+  .hobby .d { font-size: 13.5px; color: var(--muted); }
+
+  .goal-box {
+    margin-top: 26px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 18px 20px;
+    border-radius: 14px;
+    background: linear-gradient(90deg, rgba(167,139,250,0.12), rgba(34,211,238,0.08));
+    border: 1px solid rgba(167,139,250,0.3);
+  }
+  .goal-box .target { font-size: 22px; }
+  .goal-box p { font-size: 15px; color: var(--text); }
+  .goal-box .sub { font-size: 12.5px; color: var(--muted); }
+
+  /* ---- 技术栈 ---- */
+  .tech-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 16px;
+  }
+  .tech {
+    padding: 20px 22px;
+    border-radius: 16px;
+    background: var(--item-bg);
+    border: 1px solid var(--item-border);
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+    transition: background 0.3s, border-color 0.3s, transform 0.3s;
+  }
+  .tech:hover { transform: translateY(-3px); border-color: var(--cyan); background: rgba(34,211,238,0.05); }
+  .tech .t-ic {
+    font-size: 22px;
+    flex-shrink: 0;
+    width: 42px; height: 42px;
+    display: grid;
+    place-items: center;
+    border-radius: 10px;
+    background: rgba(34,211,238,0.1);
+    border: 1px solid var(--border);
+  }
+  .tech .t-name { font-weight: 700; font-size: 15px; margin-bottom: 5px; }
+  .tech .t-items { font-size: 13.5px; color: var(--muted); font-family: var(--mono); }
+
+  /* ---- 我做的（大磁贴） ---- */
+  .work-grid { display: grid; grid-template-columns: 1fr; gap: 18px; }
+  .work-tile {
+    position: relative;
+    display: block;
+    border-radius: 20px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+    text-decoration: none;
+    color: var(--text);
+    transition: transform 0.3s, border-color 0.3s, box-shadow 0.3s;
+  }
+  .work-tile:hover {
+    transform: translateY(-4px);
+    border-color: var(--cyan);
+    box-shadow: 0 20px 50px var(--shadow-strong), 0 0 30px var(--cyan-glow);
+  }
+  .work-cover {
+    height: 300px;
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    align-items: flex-end;
+    position: relative;
+  }
+  .work-cover::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: linear-gradient(180deg, transparent 25%, rgba(3,6,14,0.85));
+  }
+  .work-info {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    padding: 24px 28px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+  }
+  .work-name { font-weight: 800; font-size: 22px; color: #fff; font-family: var(--mono); text-shadow: 0 2px 14px rgba(0,0,0,0.5); }
+  .work-meta { display: flex; align-items: center; gap: 14px; }
+  .work-val { font-size: 13px; color: rgba(255,255,255,0.78); font-family: var(--mono); }
+  .work-tile .arrow { color: var(--cyan); font-size: 22px; opacity: 0; transform: translateX(-6px); transition: all 0.3s; text-shadow: 0 0 12px var(--cyan-glow); }
+  .work-tile:hover .arrow { opacity: 1; transform: translateX(0); }
+  @media (max-width: 640px) { .work-cover { height: 220px; } }
+
+  /* ---- 正在做的事 ---- */
+  .doing-card { max-width: 720px; }
+  .todo-row {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 16px 18px;
+    border-radius: 12px;
+    background: var(--item-bg);
+    border: 1px solid var(--item-border);
+  }
+  .todo-check {
+    width: 22px; height: 22px;
+    border-radius: 7px;
+    border: 2px solid var(--cyan);
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+    box-shadow: 0 0 10px var(--cyan-glow);
+    font-size: 13px;
+    color: var(--bg);
+    background: var(--cyan);
+  }
+  .todo-text { font-size: 15px; flex: 1; }
+  .todo-tag {
+    font-family: var(--mono);
+    font-size: 11.5px;
+    color: var(--cyan);
+    background: rgba(34,211,238,0.12);
+    border: 1px solid var(--border);
+    padding: 3px 10px;
+    border-radius: 999px;
+    white-space: nowrap;
+  }
+  .progress-wrap { margin-top: 24px; }
+  .progress-meta {
+    display: flex;
+    justify-content: space-between;
+    font-family: var(--mono);
+    font-size: 12.5px;
+    color: var(--muted);
+    margin-bottom: 10px;
+  }
+  .progress-bar {
+    height: 12px;
+    border-radius: 999px;
+    background: var(--track-bg);
+    border: 1px solid var(--border);
+    overflow: hidden;
+    position: relative;
+  }
+  .progress-fill {
+    height: 100%;
+    width: 12%;
+    border-radius: 999px;
+    background: linear-gradient(90deg, var(--cyan), var(--purple));
+    box-shadow: 0 0 18px var(--cyan-glow);
+    transition: width 1.4s cubic-bezier(.2,.8,.2,1);
+    position: relative;
+    overflow: hidden;
+  }
+  .progress-fill::after {
+    content: '';
+    position: absolute; inset: 0;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.45), transparent);
+    animation: shine 2.4s infinite;
+  }
+  @keyframes shine { 0% { transform: translateX(-100%); } 100% { transform: translateX(100%); } }
+  .progress-tip { margin-top: 10px; font-size: 12.5px; color: var(--muted); }
+
+  /* ---- 联系 ---- */
+  .contact-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 18px;
+  }
+  .contact {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 24px;
+    border-radius: 16px;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    text-decoration: none;
+    color: var(--text);
+    transition: transform 0.3s, border-color 0.3s, box-shadow 0.3s;
+  }
+  .contact:hover {
+    transform: translateY(-4px);
+    border-color: var(--cyan);
+    box-shadow: 0 0 26px var(--cyan-glow);
+  }
+  .contact .c-ic {
+    width: 52px; height: 52px;
+    border-radius: 14px;
+    display: grid;
+    place-items: center;
+    font-size: 24px;
+    background: rgba(34,211,238,0.1);
+    border: 1px solid var(--border);
+    flex-shrink: 0;
+  }
+  .contact .c-ic.gh { color: #fff; }
+  html[data-theme="light"] .contact .c-ic.gh { color: #181717; }
+  .contact .c-ic.em { color: var(--pink); }
+  .contact .c-ic.bili { background: transparent; }
+  .contact .c-ic.bili img {
+    width: 30px;
+    height: 30px;
+    object-fit: contain;
+    border-radius: 6px;
+    transition: transform 0.3s;
+  }
+  .contact:hover .c-ic.bili img { transform: scale(1.12) rotate(-4deg); }
+  .contact .c-name .c-user { font-size: 13px; color: var(--cyan); font-weight: 600; }
+  .contact .c-name { font-weight: 700; font-size: 16px; }
+  .contact .c-val { font-size: 13px; color: var(--muted); font-family: var(--mono); }
+  .contact .arrow { margin-left: auto; color: var(--cyan); font-size: 18px; opacity: 0; transform: translateX(-6px); transition: all 0.3s; }
+  .contact:hover .arrow { opacity: 1; transform: translateX(0); }
+
+  /* ---- 页脚 ---- */
+  footer {
+    text-align: center;
+    padding: 34px 20px 44px;
+    border-top: 1px solid var(--border);
+    color: var(--muted);
+    font-family: var(--mono);
+    font-size: 12.5px;
+  }
+  footer .heart { color: var(--pink); }
+
+  /* ---- 粒子 canvas ---- */
+  #particles {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+  }
+
+  /* ---- 滚动出现动画 ---- */
+  .reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+  }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  @media (max-width: 640px) {
+    .nav-links { display: none; }
+  }
+
+  /* ---- 自定义光标（⊙） ---- */
+  body, a, button, .badge, .tech, .hobby, .contact, .todo-row, .lang-switch button, .theme-switch {
+    cursor: none;
+  }
+  .cursor-dot, .cursor-ring {
+    position: fixed;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+    z-index: 9999;
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  html.active .cursor-dot,
+  html.active .cursor-ring { opacity: 1; }
+  .cursor-dot {
+    width: 6px;
+    height: 6px;
+    background: var(--cyan);
+    box-shadow: 0 0 8px var(--cyan-glow);
+  }
+  .cursor-ring {
+    width: 32px;
+    height: 32px;
+    border: 1.5px solid var(--cyan);
+    box-shadow: 0 0 12px var(--cyan-glow), inset 0 0 8px rgba(34,211,238,0.18);
+    transition: width 0.25s, height 0.25s, border-color 0.25s, opacity 0.3s;
+  }
+  .cursor-ring.is-hover {
+    width: 54px;
+    height: 54px;
+    border-color: var(--purple);
+    box-shadow: 0 0 18px var(--purple-glow), inset 0 0 10px rgba(167,139,250,0.22);
+  }
+  @media (hover: none), (pointer: coarse) {
+    body, a, button, .badge, .tech, .hobby, .contact, .todo-row, .lang-switch button, .theme-switch { cursor: auto; }
+    .cursor-dot, .cursor-ring { display: none !important; }
+  }
+
+  /* ---- 页脚 Cloudflare 声明 ---- */
+  .footer-cf { margin-top: 10px; font-size: 12px; color: var(--muted); }
+  .cf-link {
+    background: none;
+    border: none;
+    padding: 0;
+    margin: 0;
+    color: var(--cyan);
+    font-family: var(--mono);
+    font-size: 12px;
+    cursor: pointer;
+    transition: color 0.3s, text-shadow 0.3s;
+  }
+  .cf-link:hover { color: var(--purple); text-shadow: 0 0 10px var(--purple-glow); }
+
+  /* ---- 备案信息弹窗 ---- */
+  .modal-mask {
+    position: fixed;
+    inset: 0;
+    z-index: 10000;
+    background: rgba(3, 6, 14, 0.6);
+    backdrop-filter: blur(6px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.25s, visibility 0.25s;
+    padding: 20px;
+  }
+  .modal-mask.show { opacity: 1; visibility: visible; }
+  .modal-box {
+    position: relative;
+    max-width: 480px;
+    width: 100%;
+    padding: 30px 28px;
+    border-radius: 18px;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    backdrop-filter: blur(16px);
+    box-shadow: 0 0 46px var(--cyan-glow);
+    color: var(--text);
+    transform: translateY(14px) scale(0.97);
+    transition: transform 0.28s cubic-bezier(.2, .9, .3, 1.2);
+  }
+  .modal-mask.show .modal-box { transform: translateY(0) scale(1); }
+  .modal-close {
+    position: absolute;
+    top: 12px;
+    right: 16px;
+    background: none;
+    border: none;
+    color: var(--muted);
+    font-size: 24px;
+    line-height: 1;
+    cursor: pointer;
+    transition: color 0.3s, transform 0.3s;
+  }
+  .modal-close:hover { color: var(--pink); transform: rotate(90deg); }
+  .modal-text { font-size: 15px; line-height: 1.9; text-align: center; }
+  .modal-icon { display: block; font-size: 34px; margin-bottom: 14px; text-align: center; }
+</style>
+  <script>
+    // 防闪烁：在渲染前应用已保存的主题和语言
+    (function () {
+      try {
+        var t = localStorage.getItem('apgsm-theme');
+        if (t === 'light') document.documentElement.setAttribute('data-theme', 'light');
+        var l = localStorage.getItem('apgsm-lang');
+        if (l === 'hant' || l === 'en' || l === 'zh') document.documentElement.setAttribute('data-lang', l);
+      } catch (e) {}
+    })();
+  </script>
+</head>
+<body>
+  <div class="cursor-dot"></div>
+  <div class="cursor-ring"></div>
+  <canvas id="particles"></canvas>
+  <div class="grid-bg"></div>
+  <div class="grid-lines"></div>
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+
+  <!-- 导航 -->
+  <nav>
+    <div class="nav-left">
+      <div class="logo"><span class="prompt">$</span><span>APei</span><span class="tilde">~</span></div>
+      <button id="themeToggle" class="theme-switch" aria-label="切换亮色/深色主题" title="当前：深色 · 点击切换亮色">
+        <span class="sw-thumb"></span>
+        <span class="sw-ic sw-moon" title="深色">🌙</span>
+        <span class="sw-ic sw-sun" title="亮色">☀️</span>
+      </button>
+      <div class="lang-switch" role="group" aria-label="语言 / Language">
+        <button type="button" data-lang="zh" class="active" title="简体中文">简</button>
+        <button type="button" data-lang="hant" title="繁體中文">繁</button>
+        <button type="button" data-lang="en" title="English">EN</button>
+      </div>
+    </div>
+    <ul class="nav-links">
+      <li><a href="#about" data-i18n="nav.about">关于</a></li>
+      <li><a href="#stack" data-i18n="nav.stack">技术栈</a></li>
+      <li><a href="#works" data-i18n="nav.works">我做的</a></li>
+      <li><a href="#doing" data-i18n="nav.doing">进行中</a></li>
+      <li><a href="#contact" data-i18n="nav.contact">联系</a></li>
+    </ul>
+  </nav>
+
+  <!-- Hero -->
+  <header class="hero">
+    <div class="avatar"><img src="apei.png" alt="APei 头像" /></div>
+    <div class="status-line"><span class="status-dot"></span> system: online · node: APei(apgsm)</div>
+    <h1><span id="typed"></span><span class="cursor"></span></h1>
+    <p class="tagline" data-i18n-html="hero.tagline">
+      🏫 初一 · <b>OIer</b> · 刷机爱好者 · VibeCoder<br />
+      "靠感觉写代码，<span class="hl">跑起来就是胜利</span>"
+    </p>
+    <div class="badges">
+      <span class="badge cy"><span class="ic">🎂</span> <span data-i18n="badge.age">年龄 13</span></span>
+      <span class="badge pu"><span class="ic">⚙️</span> C++</span>
+      <span class="badge gr"><span class="ic">🐧</span> Linux</span>
+      <span class="badge pk"><span class="ic">📱</span> <span data-i18n="badge.android">Android 刷机</span></span>
+      <span class="badge cy"><span class="ic">✨</span> VibeCoding</span>
+    </div>
+    <div class="scroll-hint">
+      <div class="mouse"></div>
+      <span data-i18n="hero.scroll">SCROLL</span>
+    </div>
+  </header>
+
+  <main>
+    <!-- 关于我 -->
+    <section id="about">
+      <div class="sec-head reveal">
+        <span class="sec-index">01</span>
+        <h2 data-i18n="sec.about">关于我</h2>
+        <div class="line"></div>
+      </div>
+      <div class="card reveal">
+        <p class="about-quote" data-i18n="about.quote">/* "啊...还要写简介呀？我想想..." */</p>
+        <p class="about-intro" data-i18n-html="about.intro">大家好👋 我是一个 <b>初一生</b>，平时最喜欢：</p>
+        <div class="hobby-grid">
+          <div class="hobby">
+            <span class="icon">📱</span>
+            <div><div class="t" data-i18n="hobby1.t">鼓捣刷机</div><div class="d" data-i18n="hobby1.d">从 MIUI 到 LineageOS，刷不坏不罢休</div></div>
+          </div>
+          <div class="hobby">
+            <span class="icon">💻</span>
+            <div><div class="t" data-i18n="hobby2.t">折腾电脑系统</div><div class="d" data-i18n="hobby2.d">Linux 发行版换了一个又一个</div></div>
+          </div>
+          <div class="hobby">
+            <span class="icon">✨</span>
+            <div><div class="t" data-i18n="hobby3.t">VibeCoding</div><div class="d" data-i18n="hobby3.d">靠感觉写代码，跑起来就是胜利</div></div>
+          </div>
+          <div class="hobby">
+            <span class="icon">⚙️</span>
+            <div><div class="t" data-i18n="hobby4.t">写 C++</div><div class="d" data-i18n="hobby4.d">一个纯正的 OIer（信息学竞赛选手）</div></div>
+          </div>
+        </div>
+        <div class="goal-box">
+          <span class="target">🎯</span>
+          <div>
+            <p data-i18n-html="goal.p"><b>明年目标</b>：参加黑客松巅峰赛</p>
+            <div class="sub" data-i18n="goal.sub">理想很美好，现实还不知道 😄</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 技术栈 -->
+    <section id="stack">
+      <div class="sec-head reveal">
+        <span class="sec-index">02</span>
+        <h2 data-i18n="sec.stack">技术栈 &amp; 兴趣</h2>
+        <div class="line"></div>
+      </div>
+      <div class="tech-grid">
+        <div class="tech reveal"><span class="t-ic">🧬</span><div><div class="t-name" data-i18n="tech1.name">编程语言</div><div class="t-items" data-i18n="tech1.items">C++ · Python (学习中) · HTML/CSS</div></div></div>
+        <div class="tech reveal"><span class="t-ic">🏆</span><div><div class="t-name" data-i18n="tech2.name">竞赛</div><div class="t-items" data-i18n="tech2.items">OI / 信息学竞赛 · CSP-J/S 备战中</div></div></div>
+        <div class="tech reveal"><span class="t-ic">🐧</span><div><div class="t-name" data-i18n="tech3.name">操作系统</div><div class="t-items" data-i18n="tech3.items">Linux (Ubuntu/Arch) · Windows · Android</div></div></div>
+        <div class="tech reveal"><span class="t-ic">📡</span><div><div class="t-name" data-i18n="tech4.name">刷机相关</div><div class="t-items" data-i18n="tech4.items">Fastboot · ADB · Magisk · TWRP · Custom ROMs</div></div></div>
+        <div class="tech reveal"><span class="t-ic">🛠️</span><div><div class="t-name" data-i18n="tech5.name">开发工具</div><div class="t-items" data-i18n="tech5.items">VS Code · Git · Vim (刚入门)</div></div></div>
+        <div class="tech reveal"><span class="t-ic">🔌</span><div><div class="t-name" data-i18n="tech6.name">其他</div><div class="t-items" data-i18n="tech6.items">VibeCoding · 硬件瞎折腾</div></div></div>
+      </div>
+    </section>
+
+    <!-- 我做的 -->
+    <section id="works">
+      <div class="sec-head reveal">
+        <span class="sec-index">03</span>
+        <h2 data-i18n="sec.works">我做的</h2>
+        <div class="line"></div>
+      </div>
+      <div class="work-grid">
+        <a class="work-tile reveal" href="https://blog.apgsm.qzz.io" target="_blank" rel="noopener" aria-label="阿裴的博客">
+          <div class="work-cover" style="background-image:url('https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=800&q=80')">
+            <div class="work-info">
+              <div class="work-name" data-i18n="work1.name">阿裴的博客</div>
+              <div class="work-meta">
+                <span class="work-val">blog.apgsm.qzz.io</span>
+                <span class="arrow">→</span>
+              </div>
+            </div>
+          </div>
+        </a>
+      </div>
+    </section>
+
+    <!-- 正在做的事 -->
+    <section id="doing">
+      <div class="sec-head reveal">
+        <span class="sec-index">04</span>
+        <h2 data-i18n="sec.doing">正在做的事</h2>
+        <div class="line"></div>
+      </div>
+      <div class="card doing-card reveal">
+        <div class="todo-row">
+          <div class="todo-check">✓</div>
+          <div class="todo-text" data-i18n-html="todo.text">准备 <b>CSP-J/S 初赛</b></div>
+          <div class="todo-tag" data-i18n="todo.tag">in-progress</div>
+        </div>
+        <div class="progress-wrap">
+          <div class="progress-meta"><span>csp-j_s_prep</span><span id="pct">12%</span></div>
+          <div class="progress-bar"><div class="progress-fill" id="bar" style="width:12%"></div></div>
+          <div class="progress-tip" data-i18n="todo.tip">🚧 备战中 · 完成 CSP-J/S 初赛的赛道已铺设 12%</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 联系 -->
+    <section id="contact">
+      <div class="sec-head reveal">
+        <span class="sec-index">05</span>
+        <h2 data-i18n="sec.contact">联系我</h2>
+        <div class="line"></div>
+      </div>
+      <div class="contact-grid">
+        <a class="contact reveal" href="https://github.com/apgsm" target="_blank" rel="noopener">
+          <span class="c-ic gh">
+            <svg viewBox="0 0 24 24" width="27" height="27" fill="currentColor" aria-hidden="true"><path d="M10.226 17.284c-2.965-.36-5.054-2.493-5.054-5.256 0-1.123.404-2.336 1.078-3.144-.292-.741-.247-2.314.09-2.965.898-.112 2.111.36 2.83 1.01.853-.269 1.752-.404 2.853-.404 1.1 0 1.999.135 2.807.382.696-.629 1.932-1.1 2.83-.988.315.606.36 2.179.067 2.942.72.854 1.101 2 1.101 3.167 0 2.763-2.089 4.852-5.098 5.234.763.494 1.28 1.572 1.28 2.807v2.336c0 .674.561 1.056 1.235.786 4.066-1.55 7.255-5.615 7.255-10.646C23.5 6.188 18.334 1 11.978 1 5.62 1 .5 6.188.5 12.545c0 4.986 3.167 9.12 7.435 10.669.606.225 1.19-.18 1.19-.786V20.63a2.9 2.9 0 0 1-1.078.224c-1.483 0-2.359-.808-2.987-2.313-.247-.607-.517-.966-1.034-1.033-.27-.023-.359-.135-.359-.27 0-.27.45-.471.898-.471.652 0 1.213.404 1.797 1.235.45.651.921.943 1.483.943.561 0 .92-.202 1.437-.719.382-.381.674-.718.944-.943"/></svg>
+          </span>
+          <div><div class="c-name" data-i18n="contact.gh">GitHub</div><div class="c-val">github.com/apgsm</div></div>
+          <span class="arrow">→</span>
+        </a>
+        <a class="contact reveal" href="mailto:a1a21923@outlook.com">
+          <span class="c-ic em">✉️</span>
+          <div><div class="c-name" data-i18n="contact.email">Email</div><div class="c-val">a1a21923@outlook.com</div></div>
+          <span class="arrow">→</span>
+        </a>
+        <a class="contact reveal" href="https://space.bilibili.com/3537112810916421" target="_blank" rel="noopener">
+          <span class="c-ic bili"><img src="https://ts3.tc.mm.bing.net/th/id/ODF.HcIfqnk4n-lbffGcaqDC2w?w=32&h=32&qlt=90&pcl=fffffa&o=6&pid=1.2" alt="Bilibili" /></span>
+          <div>
+            <div class="c-name bili-name">Bilibili <span class="c-user">@阿裴搞数码</span></div>
+            <div class="c-val" data-i18n="contact.biliVal">我的 B 站主页</div>
+          </div>
+          <span class="arrow">→</span>
+        </a>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <span>❤</span> <span data-i18n-html="footer.craft">crafted by APei (apgsm) · system uptime: <span id="uptime">0s</span> · © 2025</span>
+    <div class="footer-cf">
+      <span data-i18n="footer.cf">本网站由 Cloudflare 提供攻击防护服务，</span>
+      <button type="button" class="cf-link" id="beianBtn" data-i18n="footer.cfLink">关于备案信息 →</button>
+    </div>
+  </footer>
+
+  <!-- 备案信息弹窗 -->
+  <div class="modal-mask" id="beianModal" role="dialog" aria-modal="true" aria-labelledby="beianTitle">
+    <div class="modal-box">
+      <button type="button" class="modal-close" id="beianClose" aria-label="关闭">✕</button>
+      <span class="modal-icon">📜</span>
+      <p class="modal-text" data-i18n="footer.beian">根据中华人民共和国法律法规，服务器在境外无需 ICP 备案。</p>
+    </div>
+  </div>
+
+<script>
+  // ---- 多语言（简 / 繁 / EN）----
+  var I18N = {
+    "nav.about":     { zh: "关于", hant: "關於", en: "About" },
+    "nav.stack":     { zh: "技术栈", hant: "技術棧", en: "Stack" },
+    "nav.doing":     { zh: "进行中", hant: "進行中", en: "Doing" },
+    "nav.contact":   { zh: "联系", hant: "聯繫", en: "Contact" },
+    "hero.tagline":  { zh: "🏫 初一 · <b>OIer</b> · 刷机爱好者 · VibeCoder<br />\"靠感觉写代码，<span class=\"hl\">跑起来就是胜利</span>\"",
+                      hant: "🏫 初一 · <b>OIer</b> · 刷機愛好者 · VibeCoder<br />「靠感覺寫程式，<span class=\"hl\">跑起來就是勝利</span>」",
+                      en: "🏫 Grade 7 · <b>OIer</b> · ROM flasher · VibeCoder<br />\"Code by vibe, <span class=\"hl\">if it runs, it wins</span>\"" },
+    "badge.age":     { zh: "年龄 13", hant: "年齡 13", en: "Age 13" },
+    "badge.android": { zh: "Android 刷机", hant: "Android 刷機", en: "Android Modding" },
+    "hero.scroll":   { zh: "下滑", hant: "下滑", en: "SCROLL" },
+    "sec.about":     { zh: "关于我", hant: "關於我", en: "About Me" },
+    "sec.stack":     { zh: "技术栈 & 兴趣", hant: "技術棧 & 興趣", en: "Tech Stack & Interests" },
+    "nav.works":     { zh: "我做的", hant: "我做的", en: "My Works" },
+    "sec.works":     { zh: "我做的", hant: "我做的", en: "My Works" },
+    "work1.name":    { zh: "阿裴的博客", hant: "阿裴的部落格", en: "APei's Blog" },
+    "sec.doing":     { zh: "正在做的事", hant: "正在做的事", en: "What I'm Doing" },
+    "sec.contact":   { zh: "联系我", hant: "聯繫我", en: "Contact Me" },
+    "about.quote":   { zh: "/* \"啊...还要写简介呀？我想想...\" */", hant: "/* 「啊⋯還要寫簡介呀？我想想⋯」 */", en: "/* \"Hmm... an intro? Let me think...\" */" },
+    "about.intro":   { zh: "大家好👋 我是一个 <b>初一生</b>，平时最喜欢：", hant: "大家好👋 我是一個 <b>初一生</b>，平時最喜歡：", en: "Hi👋 I'm a <b>7th grader</b>. What I love most:" },
+    "hobby1.t":      { zh: "鼓捣刷机", hant: "鼓搗刷機", en: "Flashing ROMs" },
+    "hobby1.d":      { zh: "从 MIUI 到 LineageOS，刷不坏不罢休", hant: "從 MIUI 到 LineageOS，刷不壞不罷休", en: "From MIUI to LineageOS — can't stop till it works" },
+    "hobby2.t":      { zh: "折腾电脑系统", hant: "折騰電腦系統", en: "Tinkering with OSes" },
+    "hobby2.d":      { zh: "Linux 发行版换了一个又一个", hant: "Linux 發行版換了一個又一個", en: "Distro-hopping, one after another" },
+    "hobby3.t":      { zh: "VibeCoding", hant: "VibeCoding", en: "VibeCoding" },
+    "hobby3.d":      { zh: "靠感觉写代码，跑起来就是胜利", hant: "靠感覺寫程式，跑起來就是勝利", en: "Code by vibe — if it runs, it wins" },
+    "hobby4.t":      { zh: "写 C++", hant: "寫 C++", en: "Writing C++" },
+    "hobby4.d":      { zh: "一个纯正的 OIer（信息学竞赛选手）", hant: "一個純正的 OIer（資訊學競賽選手）", en: "A true OIer (competitive programming)" },
+    "goal.p":        { zh: "<b>明年目标</b>：参加黑客松巅峰赛", hant: "<b>明年目標</b>：參加黑客松巔峰賽", en: "<b>Next-year goal</b>: hackathon showdown" },
+    "goal.sub":      { zh: "理想很美好，现实还不知道 😄", hant: "理想很美好，現實還不知道 😄", en: "Dreams are big, reality TBD 😄" },
+    "tech1.name":    { zh: "编程语言", hant: "程式語言", en: "Languages" },
+    "tech1.items":   { zh: "C++ · Python (学习中) · HTML/CSS", hant: "C++ · Python（學習中）· HTML/CSS", en: "C++ · Python (learning) · HTML/CSS" },
+    "tech2.name":    { zh: "竞赛", hant: "競賽", en: "Competitions" },
+    "tech2.items":   { zh: "OI / 信息学竞赛 · CSP-J/S 备战中", hant: "OI / 資訊學競賽 · CSP-J/S 備戰中", en: "OI / CP · prepping for CSP-J/S" },
+    "tech3.name":    { zh: "操作系统", hant: "作業系統", en: "Operating Systems" },
+    "tech3.items":   { zh: "Linux (Ubuntu/Arch) · Windows · Android", hant: "Linux (Ubuntu/Arch) · Windows · Android", en: "Linux (Ubuntu/Arch) · Windows · Android" },
+    "tech4.name":    { zh: "刷机相关", hant: "刷機相關", en: "Flashing Tools" },
+    "tech4.items":   { zh: "Fastboot · ADB · Magisk · TWRP · Custom ROMs", hant: "Fastboot · ADB · Magisk · TWRP · Custom ROMs", en: "Fastboot · ADB · Magisk · TWRP · Custom ROMs" },
+    "tech5.name":    { zh: "开发工具", hant: "開發工具", en: "Dev Tools" },
+    "tech5.items":   { zh: "VS Code · Git · Vim (刚入门)", hant: "VS Code · Git · Vim（剛入門）", en: "VS Code · Git · Vim (just started)" },
+    "tech6.name":    { zh: "其他", hant: "其他", en: "Others" },
+    "tech6.items":   { zh: "VibeCoding · 硬件瞎折腾", hant: "VibeCoding · 硬體瞎折騰", en: "VibeCoding · hardware tinkering" },
+    "todo.text":     { zh: "准备 <b>CSP-J/S 初赛</b>", hant: "準備 <b>CSP-J/S 初賽</b>", en: "Preparing for <b>CSP-J/S prelim</b>" },
+    "todo.tag":      { zh: "进行中", hant: "進行中", en: "in-progress" },
+    "todo.tip":      { zh: "🚧 备战中 · 完成 CSP-J/S 初赛的赛道已铺设 {pct}%", hant: "🚧 備戰中 · 完成 CSP-J/S 初賽的賽道已鋪設 {pct}%", en: "🚧 In progress · {pct}% of the CSP-J/S prep track laid" },
+    "contact.gh":    { zh: "GitHub", hant: "GitHub", en: "GitHub" },
+    "contact.email": { zh: "Email", hant: "Email", en: "Email" },
+    "contact.biliVal": { zh: "我的 B 站主页", hant: "我的 B 站主頁", en: "My Bilibili" },
+    "footer.craft":  { zh: "crafted by APei (apgsm) · system uptime: <span id=\"uptime\">0s</span> · © 2025",
+                       hant: "crafted by APei (apgsm) · 系統運行時間：<span id=\"uptime\">0s</span> · © 2025",
+                       en: "crafted by APei (apgsm) · uptime: <span id=\"uptime\">0s</span> · © 2025" },
+    "footer.cf":     { zh: "本网站由 Cloudflare 提供攻击防护服务，", hant: "本網站由 Cloudflare 提供攻擊防護服務，", en: "This site is protected by Cloudflare, " },
+    "footer.cfLink": { zh: "关于备案信息 →", hant: "關於備案資訊 →", en: "about ICP filing →" },
+    "footer.beian":  { zh: "根据中华人民共和国法律法规，服务器在境外无需 ICP 备案。", hant: "根據中華人民共和國法律法規，伺服器在境外無需 ICP 備案。", en: "Per PRC laws and regulations, servers overseas do not require ICP filing." }
+  };
+
+  var PHRASES = {
+    zh:   ["Hi, I'm APei (apgsm) 👋", 'OIer · 刷机爱好者', 'VibeCoder: "run it is win"'],
+    hant: ["嗨，我是 APei (apgsm) 👋", 'OIer · 刷機愛好者', 'VibeCoder：「跑起來就是勝利」'],
+    en:   ["Hi, I'm APei (apgsm) 👋", 'OIer · ROM flasher', 'VibeCoder: "run it is win"']
+  };
+
+  let phrases = (PHRASES[document.documentElement.getAttribute('data-lang') || 'zh'] || PHRASES.zh).slice();
+  let pi = 0, ci = 0, deleting = false;
+  let typedEl = null;
+  // CSP-J/S 初赛准备进度：2026-08-01(0%) → 2026-09-19(100%) 按日期线性插值
+  function calcPrepPct() {
+    var start = new Date('2026-08-01T00:00:00+08:00');
+    var end = new Date('2026-09-19T23:59:59+08:00');
+    var now = new Date();
+    if (now <= start) return 0;
+    if (now >= end) return 100;
+    var total = end.getTime() - start.getTime();
+    var passed = now.getTime() - start.getTime();
+    return Math.round((passed / total) * 100);
+  }
+  var prepPct = calcPrepPct();
+
+  function applyLang(lang) {
+    if (lang !== 'zh' && lang !== 'hant' && lang !== 'en') lang = 'zh';
+    document.documentElement.setAttribute('data-lang', lang);
+    document.querySelectorAll('.lang-switch button').forEach(function (b) {
+      b.classList.toggle('active', b.getAttribute('data-lang') === lang);
+    });
+    Object.keys(I18N).forEach(function (key) {
+      var val = I18N[key][lang];
+      if (val === undefined) val = I18N[key].zh;
+      if (key === 'todo.tip' && typeof prepPct !== 'undefined') val = val.replace('{pct}', prepPct);
+      document.querySelectorAll('[data-i18n="' + key + '"]').forEach(function (el) { el.textContent = val; });
+      document.querySelectorAll('[data-i18n-html="' + key + '"]').forEach(function (el) { el.innerHTML = val; });
+    });
+    // 打字机文案切换
+    if (typeof phrases !== 'undefined') {
+      phrases = PHRASES[lang] || PHRASES.zh;
+      pi = 0; ci = 0; deleting = false;
+      var te = document.getElementById('typed');
+      if (te) te.textContent = '';
+    }
+  }
+
+  document.querySelectorAll('.lang-switch button').forEach(function (b) {
+    b.addEventListener('click', function () {
+      var lang = b.getAttribute('data-lang');
+      applyLang(lang);
+      try { localStorage.setItem('apgsm-lang', lang); } catch (e) {}
+    });
+  });
+
+  var savedLang = document.documentElement.getAttribute('data-lang') || 'zh';
+  if (savedLang !== 'zh' && savedLang !== 'hant' && savedLang !== 'en') savedLang = 'zh';
+  applyLang(savedLang);
+
+  // ---- 粒子背景 ----
+  const canvas = document.getElementById('particles');
+  const ctx = canvas.getContext('2d');
+  let W, H, particles = [];
+  const COLORS = ['#22d3ee', '#a78bfa', '#f472b6'];
+  function resize() {
+    W = canvas.width = innerWidth;
+    H = canvas.height = innerHeight;
+  }
+  resize();
+  addEventListener('resize', resize);
+  function initParticles() {
+    particles = [];
+    const n = Math.min(90, Math.floor(W * H / 16000));
+    for (let i = 0; i < n; i++) {
+      particles.push({
+        x: Math.random() * W,
+        y: Math.random() * H,
+        vx: (Math.random() - 0.5) * 0.4,
+        vy: (Math.random() - 0.5) * 0.4,
+        r: Math.random() * 1.8 + 0.6,
+        c: COLORS[Math.floor(Math.random() * COLORS.length)]
+      });
+    }
+  }
+  initParticles();
+  function tick() {
+    ctx.clearRect(0, 0, W, H);
+    for (const p of particles) {
+      p.x += p.vx; p.y += p.vy;
+      if (p.x < 0 || p.x > W) p.vx *= -1;
+      if (p.y < 0 || p.y > H) p.vy *= -1;
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      ctx.fillStyle = p.c;
+      ctx.globalAlpha = 0.6;
+      ctx.fill();
+    }
+    // 连线
+    for (let i = 0; i < particles.length; i++) {
+      for (let j = i + 1; j < particles.length; j++) {
+        const dx = particles[i].x - particles[j].x;
+        const dy = particles[i].y - particles[j].y;
+        const d = Math.hypot(dx, dy);
+        if (d < 130) {
+          ctx.globalAlpha = (1 - d / 130) * 0.16;
+          ctx.strokeStyle = '#22d3ee';
+          ctx.lineWidth = 1;
+          ctx.beginPath();
+          ctx.moveTo(particles[i].x, particles[i].y);
+          ctx.lineTo(particles[j].x, particles[j].y);
+          ctx.stroke();
+        }
+      }
+    }
+    ctx.globalAlpha = 1;
+    requestAnimationFrame(tick);
+  }
+  tick();
+
+  // ---- 主题切换 ----
+  (function () {
+    var btn = document.getElementById('themeToggle');
+    if (btn) {
+      btn.addEventListener('click', function () {
+        var html = document.documentElement;
+        var next = html.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+        html.setAttribute('data-theme', next);
+        try { localStorage.setItem('apgsm-theme', next); } catch (e) {}
+      });
+    }
+  })();
+
+  // ---- 打字机效果 ----
+  typedEl = document.getElementById('typed');
+  function type() {
+    const cur = phrases[pi];
+    if (!deleting) {
+      typedEl.textContent = cur.slice(0, ++ci);
+      if (ci === cur.length) {
+        deleting = true;
+        return setTimeout(type, 2000);
+      }
+      return setTimeout(type, 90);
+    }
+    typedEl.textContent = cur.slice(0, --ci);
+    if (ci === 0) {
+      deleting = false;
+      pi = (pi + 1) % phrases.length;
+    }
+    return setTimeout(type, 45);
+  }
+  setTimeout(type, 600);
+
+  // ---- 滚动出现 ----
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+  // ---- 进度条动画 ----
+  const bar = document.getElementById('bar');
+  const pct = document.getElementById('pct');
+  function animateBar() {
+    const target = typeof prepPct !== 'undefined' ? prepPct : 0;
+    let cur = 0;
+    const step = () => {
+      cur += 1;
+      if (cur > target) cur = target;
+      bar.style.width = cur + '%';
+      pct.textContent = cur + '%';
+      if (cur < target) requestAnimationFrame(step);
+      else syncTip();
+    };
+    const syncTip = () => {
+      var lang = document.documentElement.getAttribute('data-lang') || 'zh';
+      var tip = document.querySelector('[data-i18n="todo.tip"]');
+      var tpl = (I18N['todo.tip'][lang] || I18N['todo.tip'].zh);
+      if (tip) tip.textContent = tpl.replace('{pct}', cur);
+    };
+    setTimeout(step, 400);
+  }
+  const barIo = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) { animateBar(); barIo.disconnect(); } });
+  }, { threshold: 0.4 });
+  barIo.observe(document.querySelector('.progress-bar'));
+
+  // ---- 页脚运行时间 ----
+  const boot = Date.now();
+  setInterval(() => {
+    const s = Math.floor((Date.now() - boot) / 1000);
+    const u = document.getElementById('uptime');
+    if (u) u.textContent = s + 's';
+  }, 1000);
+
+  // ---- 自定义光标（⊙）----
+  (function () {
+    var isTouch = window.matchMedia('(hover: none), (pointer: coarse)').matches;
+    var dot = document.querySelector('.cursor-dot');
+    var ring = document.querySelector('.cursor-ring');
+    if (isTouch || !dot || !ring) { if (dot) dot.style.display = 'none'; if (ring) ring.style.display = 'none'; return; }
+
+    var mouseX = -100, mouseY = -100;
+    var ringX = -100, ringY = -100;
+    var raf = null;
+    var docEl = document.documentElement;
+
+    function onMove(e) {
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+      if (!docEl.classList.contains('active')) docEl.classList.add('active');
+      dot.style.left = mouseX + 'px';
+      dot.style.top = mouseY + 'px';
+      if (!raf) { ringX = mouseX; ringY = mouseY; raf = requestAnimationFrame(loop); }
+    }
+    function loop() {
+      ringX += (mouseX - ringX) * 0.16;
+      ringY += (mouseY - ringY) * 0.16;
+      ring.style.left = ringX + 'px';
+      ring.style.top = ringY + 'px';
+      if (Math.abs(mouseX - ringX) < 0.4 && Math.abs(mouseY - ringY) < 0.4) { ringX = mouseX; ringY = mouseY; raf = null; return; }
+      raf = requestAnimationFrame(loop);
+    }
+    function onLeave() {
+      docEl.classList.remove('active');
+      if (raf) { cancelAnimationFrame(raf); raf = null; }
+    }
+    function onEnter() {
+      docEl.classList.add('active');
+    }
+    document.addEventListener('mousemove', onMove);
+    document.addEventListener('mouseleave', onLeave);
+    document.addEventListener('mouseenter', onEnter);
+
+    // 悬停可点击元素：圆环放大高亮
+    var hoverSel = 'a, button, .badge, .tech, .hobby, .contact, .todo-row, .theme-switch, .lang-switch button';
+    document.addEventListener('mouseover', function (e) {
+      if (e.target.closest(hoverSel)) ring.classList.add('is-hover');
+    });
+    document.addEventListener('mouseout', function (e) {
+      if (e.target.closest(hoverSel)) ring.classList.remove('is-hover');
+    });
+  })();
+
+  // ---- 备案信息弹窗 ----
+  (function () {
+    var btn = document.getElementById('beianBtn');
+    var modal = document.getElementById('beianModal');
+    var close = document.getElementById('beianClose');
+    if (!btn || !modal || !close) return;
+    function openModal() { modal.classList.add('show'); }
+    function closeModal() { modal.classList.remove('show'); }
+    btn.addEventListener('click', function (e) { e.preventDefault(); openModal(); });
+    close.addEventListener('click', closeModal);
+    modal.addEventListener('click', function (e) { if (e.target === modal) closeModal(); });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeModal(); });
+  })();
+</script>
+</body>
+</html>
