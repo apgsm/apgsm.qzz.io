@@ -727,7 +727,7 @@
   }
 
   /* ---- 自定义光标（⊙） ---- */
-  body, a, button, .badge, .tech, .hobby, .contact, .todo-row, .lang-switch button, .theme-switch {
+  html.active, html.active * {
     cursor: none;
   }
   .cursor-dot, .cursor-ring {
@@ -754,7 +754,7 @@
     height: 32px;
     border: 1.5px solid var(--cyan);
     box-shadow: 0 0 12px var(--cyan-glow), inset 0 0 8px rgba(34,211,238,0.18);
-    transition: width 0.25s, height 0.25s, border-color 0.25s, opacity 0.3s;
+    transition: width 0.25s, height 0.25s, border-color 0.25s, box-shadow 0.25s, opacity 0.3s;
   }
   .cursor-ring.is-hover {
     width: 54px;
@@ -1304,15 +1304,17 @@
     var mouseX = -100, mouseY = -100;
     var ringX = -100, ringY = -100;
     var raf = null;
+    var ringInit = false;
     var docEl = document.documentElement;
 
     function onMove(e) {
       mouseX = e.clientX;
       mouseY = e.clientY;
       if (!docEl.classList.contains('active')) docEl.classList.add('active');
+      if (!ringInit) { ringX = mouseX; ringY = mouseY; ringInit = true; }
       dot.style.left = mouseX + 'px';
       dot.style.top = mouseY + 'px';
-      if (!raf) { ringX = mouseX; ringY = mouseY; raf = requestAnimationFrame(loop); }
+      if (!raf) { raf = requestAnimationFrame(loop); }
     }
     function loop() {
       ringX += (mouseX - ringX) * 0.16;
@@ -1324,14 +1326,11 @@
     }
     function onLeave() {
       docEl.classList.remove('active');
+      ringInit = false;
       if (raf) { cancelAnimationFrame(raf); raf = null; }
-    }
-    function onEnter() {
-      docEl.classList.add('active');
     }
     document.addEventListener('mousemove', onMove);
     document.addEventListener('mouseleave', onLeave);
-    document.addEventListener('mouseenter', onEnter);
 
     // 悬停可点击元素：圆环放大高亮
     var hoverSel = 'a, button, .badge, .tech, .hobby, .contact, .todo-row, .theme-switch, .lang-switch button';
@@ -1339,7 +1338,9 @@
       if (e.target.closest(hoverSel)) ring.classList.add('is-hover');
     });
     document.addEventListener('mouseout', function (e) {
-      if (e.target.closest(hoverSel)) ring.classList.remove('is-hover');
+      var fromHover = e.target.closest(hoverSel);
+      var toHover = e.relatedTarget ? e.relatedTarget.closest(hoverSel) : null;
+      if (fromHover && fromHover !== toHover) ring.classList.remove('is-hover');
     });
   })();
 
