@@ -984,13 +984,13 @@
       <div class="card doing-card reveal">
         <div class="todo-row">
           <div class="todo-check">✓</div>
-          <div class="todo-text" data-i18n-html="todo.text">准备 <b>CSP-J/S 第二轮</b></div>
+          <div class="todo-text" data-i18n-html="todo.text">准备 <b>CSP-J/S 复赛</b></div>
           <div class="todo-tag" data-i18n="todo.tag">in-progress</div>
         </div>
         <div class="progress-wrap">
           <div class="progress-meta"><span>csp-j_s_prep</span><span id="pct">12%</span></div>
           <div class="progress-bar"><div class="progress-fill" id="bar" style="width:12%"></div></div>
-          <div class="progress-tip" data-i18n="todo.tip">🚧 备战中 · 完成 CSP-J/S 初赛的赛道已铺设 12%</div>
+          <div class="progress-tip" data-i18n="todo.tip">🚧 备战中 · 完成 CSP-J/S 复赛的赛道已铺设 12%</div>
         </div>
       </div>
     </section>
@@ -1089,9 +1089,9 @@
     "tech5.items":   { zh: "VS Code · Git · Vim (刚入门)", hant: "VS Code · Git · Vim（剛入門）", en: "VS Code · Git · Vim (just started)" },
     "tech6.name":    { zh: "其他", hant: "其他", en: "Others" },
     "tech6.items":   { zh: "VibeCoding · 硬件瞎折腾", hant: "VibeCoding · 硬體瞎折騰", en: "VibeCoding · hardware tinkering" },
-    "todo.text":     { zh: "准备 <b>CSP-J/S 初赛</b>", hant: "準備 <b>CSP-J/S 初賽</b>", en: "Preparing for <b>CSP-J/S prelim</b>" },
+    "todo.text":     { zh: "准备 <b>CSP-J/S 复赛</b>", hant: "準備 <b>CSP-J/S 複賽</b>", en: "Preparing for <b>CSP-J/S finals</b>" },
     "todo.tag":      { zh: "进行中", hant: "進行中", en: "in-progress" },
-    "todo.tip":      { zh: "🚧 备战中 · 完成 CSP-J/S 初赛的赛道已铺设 {pct}%", hant: "🚧 備戰中 · 完成 CSP-J/S 初賽的賽道已鋪設 {pct}%", en: "🚧 In progress · {pct}% of the CSP-J/S prep track laid" },
+    "todo.tip":      { zh: "🚧 备战中 · 完成 CSP-J/S 复赛的赛道已铺设 {pct}%", hant: "🚧 備戰中 · 完成 CSP-J/S 複賽的賽道已鋪設 {pct}%", en: "🚧 In progress · {pct}% of the CSP-J/S prep track laid" },
     "contact.gh":    { zh: "GitHub", hant: "GitHub", en: "GitHub" },
     "contact.email": { zh: "Email", hant: "Email", en: "Email" },
     "contact.biliVal": { zh: "我的 B 站主页", hant: "我的 B 站主頁", en: "My Bilibili" },
@@ -1112,10 +1112,10 @@
   let phrases = (PHRASES[document.documentElement.getAttribute('data-lang') || 'zh'] || PHRASES.zh).slice();
   let pi = 0, ci = 0, deleting = false;
   let typedEl = null;
-  // CSP-J/S 初赛准备进度：2026-08-01(0%) → 2026-09-19(100%) 按日期线性插值
+  // CSP-J/S 复赛准备进度：2026-09-25(0%) → 2026-10-31(100%) 按日期线性插值
   function calcPrepPct() {
-    var start = new Date('2026-08-01T00:00:00+08:00');
-    var end = new Date('2026-09-19T23:59:59+08:00');
+    var start = new Date('2026-09-25T00:00:00+08:00');
+    var end = new Date('2026-10-31T23:59:59+08:00');
     var now = new Date();
     if (now <= start) return 0;
     if (now >= end) return 100;
